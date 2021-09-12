@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 include_once('./../src/Controller/PostController.php');
-if(!isset($_SESSION['login'])){
+if (!isset($_SESSION['login'])) {
     header("location:index.php");
 }
 $posts = new PostController();
@@ -46,7 +46,7 @@ $data = $posts->userPosts();
             <th>Titre</th>
             <th>Sujet</th>
             <th>Catégories</th>
-            <th>Crée le </th>
+            <th>Crée le</th>
             <th>Modifié le</th>
 
             <th>Auteur</th>
@@ -59,14 +59,14 @@ $data = $posts->userPosts();
         foreach ($data as $val) {
             echo "
                       <tr>
-                        <td>".$val['ID']."</td>
-                        <td>".$val['title']."</td>
-                        <td>".$val['content']."</td>
-                        <td>".$val['categories']."</td>
-                        <td>".$val['createdAt']."</td>
-                        <td>".$val['updatedAt']."</td>
-                        <td>".$val['userId']."</td>
-                        <td> <a href='showArticle.php?id=".$val['ID']."'> regarder </a> </td>
+                        <td>" . $val['ID'] . "</td>
+                        <td>" . $val['title'] . "</td>
+                        <td>" . $val['content'] . "</td>
+                        <td>" . $val['categories'] . "</td>
+                        <td>" . $val['createdAt'] . "</td>
+                        <td>" . $val['updatedAt'] . "</td>
+                        <td>" . $val['userId'] . "</td>
+                        <td> <a href='showArticle.php?id=" . $val['ID'] . "'> regarder </a> </td>
                        </tr>
                      
                      ";

@@ -5,9 +5,9 @@ include(__DIR__ . './../Bdd/dbFunction.php');
 
 class Category
 {
-  private $id;
-  private ?string $name;
-  private $bd;
+    private $id;
+    private ?string $name;
+    private $bd;
 
     /**
      * @param $name
@@ -50,29 +50,34 @@ class Category
         $this->name = $name;
     }
 
-    public function create(){
+    public function create()
+    {
 
-        if(!empty($this->title) && !empty($this->content) && !empty($this->categories) && !empty($this->userId)){
-            $parameters = ['name'=>$this->name];
+        if (!empty($this->title) && !empty($this->content) && !empty($this->categories) && !empty($this->userId)) {
+            $parameters = ['name' => $this->name];
             return $this->bd->newCategory($parameters);
         }
         return false;
     }
 
-    public function getPosts(){
+    public function getPosts()
+    {
         // TODO
     }
 
-    public static function all() {
+    public static function all()
+    {
         return (new dbFunction)->getCategories();
     }
 
-    public function update($parameters){
+    public function update($parameters)
+    {
         return $this->bd->updateCategory($parameters);
 
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         return $this->bd->deleteCategory($id);
     }
 

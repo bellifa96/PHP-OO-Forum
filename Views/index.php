@@ -6,20 +6,20 @@ ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 require_once(__DIR__ . './../src/Bdd/dbFunction.php');
 
-if(isset($_SESSION['login'])){
+if (isset($_SESSION['login'])) {
     header("location:./forum.php");
 }
 
 $funObj = new dbFunction();
-if (isset($_POST['login'])){
+if (isset($_POST['login'])) {
 
-$email = $_POST['lEmail'];
-$password = $_POST['lPassword'];
-$user = $funObj->Login($email, $password);
-if ($user) {
-    header("location:forum.php");
-} else {
-    echo " veuillez vérifier votre mot de passe ou email";
+    $email = $_POST['lEmail'];
+    $password = $_POST['lPassword'];
+    $user = $funObj->Login($email, $password);
+    if ($user) {
+        header("location:forum.php");
+    } else {
+        echo " veuillez vérifier votre mot de passe ou email";
     }
 }
 if (isset($_POST['register'])) {
@@ -60,7 +60,7 @@ if (isset($_POST['register'])) {
 <h2> Se connecter </h2>
 <div class="container" id="container">
     <div class="form-container sign-up-container">
-        <form action=""  method="post" >
+        <form action="" method="post">
             <h1>Créer un compte </h1>
             <input hidden name="register">
             <input type="text" placeholder="firstname" name="firstname" value="firstname"/>
@@ -72,7 +72,7 @@ if (isset($_POST['register'])) {
         </form>
     </div>
     <div class="form-container sign-in-container">
-        <form name="login" method="post"  action=""  >
+        <form name="login" method="post" action="">
             <h1>Se connecter </h1>
             <input hidden name="login">
             <input type="email" placeholder="Email" name="lEmail"/>

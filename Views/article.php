@@ -16,18 +16,18 @@ if (!isset($_SESSION['login'])) {
 if (
     isset($_POST['title'])
     && isset($_POST['content'])
-    && isset($_POST['categories'])
+    && isset($_POST['category_id'])
 ) {
 
     list (
         'title' => $title,
         'content' => $content,
-        'categories' => $categories,
-    ) = $_POST;
+        'category_id' => $category_id,
+        ) = $_POST;
 
     $postController = new PostController;
 
-    if ($postController->newPost($title, $content, $categories)) {
+    if ($postController->newPost($title, $content, $category_id)) {
         header("location:forum.php");
     } else echo "erreur lors de la création";
 
@@ -56,7 +56,7 @@ $categories = Category::all();
             <textarea placeholder="content" name="content" rows="10" cols="80"></textarea>
             <select name="category_id">
                 <option selected disabled> Veuillez choisir une catégorie</option>
-                <?php foreach($categories as $category) : ?>
+                <?php foreach ($categories as $category) : ?>
                     <option value="<?= $category->ID ?>"><?= $category->name ?></option>
                 <?php endforeach; ?>
             </select>

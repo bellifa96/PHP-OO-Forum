@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 include_once('./../src/Controller/PostController.php');
 include_once('./nav.html');
 
-if(!isset($_SESSION['login']) or !isset($_GET['id']) ){
+if (!isset($_SESSION['login']) or !isset($_GET['id'])) {
     header("location:index.php");
 }
 
@@ -15,20 +15,20 @@ $article = new PostController();
 $data = $article->show($_GET['id']);
 
 
-if(empty($data)){
+if (empty($data)) {
     header("location:index.php");
 }
-if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['categories']) ) {
+if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['categories'])) {
 
     $title = $_POST['title'];
     $content = $_POST['content'];
     $categories = $_POST['categories'];
     $postController = new PostController();
-    if($postController->edit($title,$content,$categories,$_GET['id'])){
+    if ($postController->edit($title, $content, $categories, $_GET['id'])) {
         header("location:forum.php");
-    }else{
+    } else {
         echo "erreur lors de la création";
-    } ;
+    };
 
 }
 ?>
@@ -48,17 +48,18 @@ if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['categori
 <div class="container" id="container">
     <div class="form-container ">
         <form action="" method="post">
-            <h1 style="text-align: center"> modifier un article  </h1>
+            <h1 style="text-align: center"> modifier un article </h1>
 
 
             <input type="text" placeholder="title" name="title" value="<?php echo $data['post'][0]['title']; ?>"/>
-            <textarea  placeholder="content" name="content"  rows="10" cols="80"><?php echo $data['post'][0]['content']; ?>> </textarea>
-            <select name="categories" >
+            <textarea placeholder="content" name="content" rows="10"
+                      cols="80"><?php echo $data['post'][0]['content']; ?>> </textarea>
+            <select name="categories">
                 <option disabled> Veuillez choisir une catégorie</option>
-                <option <?php  $data['post'][0]['categories']== "PHP" ? "selected":null; ?> > PHP </option>
-                <option <?php  $data['post'][0]['categories']== "HTML" ? "selected":null; ?>> HTML </option>
-                <option <?php  $data['post'][0]['categories']== "CSS" ? "selected":null; ?>> CSS </option>
-                <option <?php  $data['post'][0]['categories']== "C#" ? "selected":null; ?>> C# </option>
+                <option <?php $data['post'][0]['categories'] == "PHP" ? "selected" : null; ?> > PHP</option>
+                <option <?php $data['post'][0]['categories'] == "HTML" ? "selected" : null; ?>> HTML</option>
+                <option <?php $data['post'][0]['categories'] == "CSS" ? "selected" : null; ?>> CSS</option>
+                <option <?php $data['post'][0]['categories'] == "C#" ? "selected" : null; ?>> C#</option>
             </select>
             <button>modifier un Article</button>
         </form>
@@ -68,16 +69,18 @@ if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['categori
 
 </body>
 <style>
-    #container{
+    #container {
         width: 100%;
         justify-content: center;
     }
-    .form-container{
+
+    .form-container {
         width: fit-content;
         margin-right: auto;
-        margin-left:auto;
+        margin-left: auto;
     }
-    textarea, select, input, button{
+
+    textarea, select, input, button {
         margin: 5px;
         display: block;
     }

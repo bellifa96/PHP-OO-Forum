@@ -1,83 +1,73 @@
 <?php
+declare(strict_types=1);
 
-
-require(__DIR__.'./../Entity/Post.php') ;
-
+require(__DIR__ . './../Entity/Post.php');
 
 
 class PostController
 {
 
-
-    public function index(){
-        $posts = new Post();
-        return $posts->getPosts();
-
-
-    }
-    public function userPosts(){
-        $posts = new Post();
-        return $posts->getUserPosts();
-
-
+    public function index()
+    {
+        return (new Post)->getPosts();
     }
 
-    public function newCategory($name){
+    public function userPosts()
+    {
+        return (new Post)->getUserPosts();
+    }
+
+    public function newCategory($name)
+    {
         return (new Category($name))->create();
     }
 
-    public function newPost($title,$content,$categories){
-        $post = new Post($title,$content,$categories);
-        return $post->create();
+    public function newPost($title, $content, $category_id)
+    {
+        return (new Post($title, $content, $category_id))->create();
     }
 
-    public function show($id){
-        $post = new Post();
-        $data ['post'] = $post->getPost($id);
-        $data ['comments'] = $post->getComments($id);
-
-       // var_dump($data);die;
-        return $data;
-
-
-
-    }
-    public function edit($title,$content,$categories,$id){
-
-        $parameters = [
-            'title'=> $title,
-            'content'=> $content,
-            'categories'=> $categories,
-            'id'=> $id,
-            'updatedAt' => date('d/m/Y')
+    public function show($id)
+    {
+        $post = new Post;
+        return [
+            'post' => $post->getPost($id),
+            'comments' => $post->getComments($id)
         ];
-        $post = new Post();
-        return $post->update($parameters);
-
     }
 
-    public function editCategory($name,$id){
-        return (new Category)->update([
-            'name' => $name,
-            'id'=> $id
+    public function edit($title, $content, $category_id, $id)
+    {
+        return (new Post)->update([
+            'title' => $title,
+            'content' => $content,
+            'category_id' => $category_id,
+            'id' => $id,
+            'updatedAt' => date('d/m/Y')
         ]);
     }
 
-    public function delete($id){
-        $post = new Post();
-       return $post->delete($id);
+    public function editCategory($name, $id)
+    {
+        return (new Category)->update([
+            'name' => $name,
+            'id' => $id
+        ]);
     }
 
-    public function deleteCategory($id){
-       return (new Category)->delete($id);
+    public function delete($id)
+    {
+        return (new Post)->delete($id);
     }
 
+    public function deleteCategory($id)
+    {
+        return (new Category)->delete($id);
+    }
 
-    public function newComment($content,$id){
-        $comment = new Comment($content,$id);
-        return $comment->create();
-
-
+    public function newComment($content, $id)
+    {
+        return (new Comment($content, $id))->create();
     }
 
 }

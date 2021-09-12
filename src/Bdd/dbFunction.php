@@ -13,8 +13,7 @@ class dbFunction
         require_once(__DIR__ . '/Config.php');
         try {
             $this->pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_DATABASE, DB_USER, DB_PASSWORD);
-        }
-        catch(Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->pdo = new PDO("mysql:host=" . DB_HOST, DB_USER, DB_PASSWORD);
             $this->createDatabase(DB_DATABASE);
             $this->pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_DATABASE, DB_USER, DB_PASSWORD);
@@ -182,12 +181,12 @@ class dbFunction
 
     public function newPost($parameters)
     {
-        $sql = "INSERT INTO posts (title,content, categories,createdAt,updatedAt, userID) VALUES ( :title,:content,:categories, :createdAt, :updatedAt,:userId)";
+        $sql = "INSERT INTO posts (title,content, category_id,createdAt,updatedAt, userID) VALUES ( :title,:content,:category_id, :createdAt, :updatedAt,:userId)";
 
         if ($stmt = $this->pdo->prepare($sql)) {
             $stmt->bindParam(":title", $parameters['title'], PDO::PARAM_STR);
             $stmt->bindParam(":content", $parameters['content'], PDO::PARAM_STR);
-            $stmt->bindParam(":categories", $parameters['categories'], PDO::PARAM_STR);
+            $stmt->bindParam(":category_id", $parameters['category_id'], PDO::PARAM_STR);
             $stmt->bindParam(":createdAt", $parameters['createdAt'], PDO::PARAM_STR);
             $stmt->bindParam(":updatedAt", $parameters['updatedAt'], PDO::PARAM_STR);
             $stmt->bindParam(":userId", $parameters['userId'], PDO::PARAM_STR);
@@ -278,13 +277,13 @@ class dbFunction
     {
 
         $sql = "UPDATE posts
-SET title = :title, content = :content, categories = :categories , updatedAt = :updatedAt
+SET title = :title, content = :content, category_id = :category_id , updatedAt = :updatedAt
 WHERE ID = :id";
 
         if ($stmt = $this->pdo->prepare($sql)) {
             $stmt->bindParam(":title", $parameters['title'], PDO::PARAM_STR);
             $stmt->bindParam(":content", $parameters['content'], PDO::PARAM_STR);
-            $stmt->bindParam(":categories", $parameters['categories'], PDO::PARAM_STR);
+            $stmt->bindParam(":category_id", $parameters['category_id'], PDO::PARAM_STR);
             $stmt->bindParam(":id", $parameters['id'], PDO::PARAM_STR);
             $stmt->bindParam(":updatedAt", $parameters['updatedAt'], PDO::PARAM_STR);
             if ($stmt->execute()) {

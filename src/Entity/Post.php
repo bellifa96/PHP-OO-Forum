@@ -1,29 +1,29 @@
 <?php
 
-include(__DIR__.'./../Bdd/dbFunction.php');
+include(__DIR__ . './../Bdd/dbFunction.php');
 
 class Post
 {
-  private $id;
-  private $title;
-  private $content;
-  private $createdAt;
-  private $updatedAt;
-  private $categories;
-  private $userId;
-  private $bd;
+    private $id;
+    private $title;
+    private $content;
+    private $createdAt;
+    private $updatedAt;
+    private $category_id;
+    private $userId;
+    private $bd;
 
     /**
      * @param $title
      * @param $content
-     * @param $categories
+     * @param $category_id
      */
-    public function __construct($title= null, $content= null,$categories= null)
+    public function __construct($title = null, $content = null, $category_id = null)
     {
         $this->bd = new dbFunction();
         $this->title = $title;
         $this->content = $content;
-        $this->categories = $categories;
+        $this->category_id = $category_id;
         $this->createdAt = date('d/m/Y');
         $this->updatedAt = date('d/m/Y');
         $this->userId = $_SESSION['id'];
@@ -114,54 +114,61 @@ class Post
      */
     public function getCategories()
     {
-        return $this->categories;
+        return $this->category_id;
     }
 
     /**
-     * @param mixed $categories
+     * @param mixed $category_id
      */
-    public function setCategories($categories)
+    public function setCategories($category_id)
     {
-        $this->categories = $categories;
+        $this->category_id = $category_id;
     }
 
-    public function create(){
+    public function create()
+    {
 
-        if(!empty($this->title) && !empty($this->content) && !empty($this->categories) && !empty($this->userId)){
-            $parameters = ['title'=>$this->title,
-                'content'=>$this->content,
-                'categories'=>$this->categories,
-                'createdAt'=>$this->createdAt,
-                'updatedAt'=>$this->updatedAt,
-                'userId'=>$this->userId
+        if (!empty($this->title) && !empty($this->content) && !empty($this->category_id) && !empty($this->userId)) {
+            $parameters = ['title' => $this->title,
+                'content' => $this->content,
+                'category_id' => $this->category_id,
+                'createdAt' => $this->createdAt,
+                'updatedAt' => $this->updatedAt,
+                'userId' => $this->userId
             ];
             return $this->bd->newPost($parameters);
         }
         return false;
     }
 
-    public function getPosts(){
+    public function getPosts()
+    {
         return $this->bd->getPosts();
     }
 
-    public function getUserPosts(){
+    public function getUserPosts()
+    {
         return $this->bd->getUserPosts();
     }
 
-    public function getPost($id){
+    public function getPost($id)
+    {
         return $this->bd->getPost($id);
     }
 
-    public function getComments($id){
+    public function getComments($id)
+    {
         return $this->bd->getComments($id);
     }
 
-    public function update($parameters){
+    public function update($parameters)
+    {
         return $this->bd->updatePost($parameters);
 
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         return $this->bd->deletePost($id);
     }
 

@@ -19,7 +19,7 @@ if (
 
     list (
         'name' => $name,
-    ) = $_POST;
+        ) = $_POST;
 
     $postController = new PostController;
 
