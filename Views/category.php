@@ -1,28 +1,31 @@
 <?php
+declare(strict_types=1);
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
-include_once('./../src/Controller/CommentController.php');
-include_once('./nav.html');
+require_once(__DIR__ . './../src/Controller/PostController.php');
+require_once(__DIR__ . './nav.html');
 
-if (!isset($_SESSION['login']) || !isset($_GET['id'])) {
+if (!isset($_SESSION['login'])) {
     header("location:index.php");
 }
 
 
-if (isset($_POST['content'])) {
+if (
+    isset($_POST['name'])
+) {
 
-    $id = $_GET['id'];
+    list (
+        'name' => $name,
+        ) = $_POST;
 
-    $content = $_POST['content'];
-    $commentController = new CommentController();
-    if ($commentController->newComment($content, $id)) {
+    $postController = new PostController;
+
+    if ($postController->newCategory($name)) {
         header("location:forum.php");
-    } else {
-        echo "erreur lors de la création";
-    };
+    } else echo "erreur lors de la création du catégorie";
 
 }
 ?>
@@ -42,9 +45,9 @@ if (isset($_POST['content'])) {
 <div class="container" id="container">
     <div class="form-container ">
         <form action="" method="post">
-            <h1 style="text-align: center"> Créer un nouveau commentaire </h1>
-            <textarea placeholder="content" name="content" rows="10" cols="80"></textarea>
-            <button>Créer un commentaire</button>
+            <h1 style="text-align: center"> Ajout d'une catégorie </h1>
+            <input type="text" placeholder="Gestion de projet" name="name"/>
+            <button>Valider</button>
         </form>
     </div>
 

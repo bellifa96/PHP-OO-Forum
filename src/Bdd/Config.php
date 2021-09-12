@@ -1,6 +1,6 @@
 <?php
 
 const DB_HOST = 'localhost';
-const DB_USER = 'rootouss';
-const DB_PASSWORD = 'root';
-const DB_DATABASE = 'phpooForum';
+const DB_USER = 'root';
+const DB_PASSWORD = '';
+const DB_DATABASE = 'ipssi_php_posts_ouss';

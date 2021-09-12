@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 session_start();
 
 class dbFunction
@@ -8,15 +10,21 @@ class dbFunction
 
     function __construct()
     {
-        require_once('Config.php');
+        require_once(__DIR__ . '/Config.php');
         try {
-            $this->pdo = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_DATABASE, DB_USER, DB_PASSWORD);
+            $this->pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_DATABASE, DB_USER, DB_PASSWORD);
+        } catch (Throwable $throwable) {
+            $this->pdo = new PDO("mysql:host=" . DB_HOST, DB_USER, DB_PASSWORD);
+            $this->createDatabase(DB_DATABASE);
+            $this->pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_DATABASE, DB_USER, DB_PASSWORD);
+        }
+
+        try {
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->createTableCategories();
             $this->createTablePosts();
             $this->createTableComment();
             $this->createTableUser();
-
-
         } catch (PDOException $e) {
             die("ERROR: Could not connect. " . $e->getMessage());
         }
@@ -34,6 +42,18 @@ class dbFunction
                 `password` varchar(255) NOT NULL default '',
                 PRIMARY KEY  (`ID`)
         )";
+        $stmt = $this->pdo->prepare($sql);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function createDatabase($database)
+    {
+        $sql = "CREATE DATABASE IF NOT EXISTS `$database`";
         $stmt = $this->pdo->prepare($sql);
         if ($stmt->execute()) {
             return true;
@@ -89,8 +109,7 @@ class dbFunction
 
     }
 
-    public
-    function isUserExist($email)
+    public function isUserExist($email)
     {
         $sql = "SELECT * FROM user WHERE email = :email";
         if ($stmt = $this->pdo->prepare($sql)) {
@@ -110,10 +129,26 @@ class dbFunction
                 `ID` int(11) unsigned NOT NULL auto_increment,
                 `title` varchar(255) NOT NULL default '',
                 `content` varchar(255) NOT NULL default '',
-                `categories` varchar(255) NOT NULL default '',
+                `category_id` INT(11) NOT NULL ,
                 `createdAt` varchar(255) NOT NULL default '',
                 `updatedAt` varchar(255) NOT NULL default '',
                 `userId` int(11) unsigned NOT NULL ,
+                PRIMARY KEY  (`ID`)
+        )";
+        $stmt = $this->pdo->prepare($sql);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function createTableCategories()
+    {
+        $sql = "CREATE TABLE IF NOT EXISTS `categories` (
+                `ID` int(11) unsigned NOT NULL auto_increment,
+                `name` varchar(255) NOT NULL default '',
                 PRIMARY KEY  (`ID`)
         )";
         $stmt = $this->pdo->prepare($sql);
@@ -146,12 +181,12 @@ class dbFunction
 
     public function newPost($parameters)
     {
-        $sql = "INSERT INTO posts (title,content, categories,createdAt,updatedAt, userID) VALUES ( :title,:content,:categories, :createdAt, :updatedAt,:userId)";
+        $sql = "INSERT INTO posts (title,content, category_id,createdAt,updatedAt, userID) VALUES ( :title,:content,:category_id, :createdAt, :updatedAt,:userId)";
 
         if ($stmt = $this->pdo->prepare($sql)) {
             $stmt->bindParam(":title", $parameters['title'], PDO::PARAM_STR);
             $stmt->bindParam(":content", $parameters['content'], PDO::PARAM_STR);
-            $stmt->bindParam(":categories", $parameters['categories'], PDO::PARAM_STR);
+            $stmt->bindParam(":category_id", $parameters['category_id'], PDO::PARAM_STR);
             $stmt->bindParam(":createdAt", $parameters['createdAt'], PDO::PARAM_STR);
             $stmt->bindParam(":updatedAt", $parameters['updatedAt'], PDO::PARAM_STR);
             $stmt->bindParam(":userId", $parameters['userId'], PDO::PARAM_STR);
@@ -160,6 +195,34 @@ class dbFunction
             } else {
                 return false;
             }
+        }
+    }
+
+    public function newCategory($parameters)
+    {
+        $sql = "INSERT INTO categories (name) VALUES (:name)";
+
+        if ($stmt = $this->pdo->prepare($sql)) {
+            $stmt->bindParam(":name", $parameters['name'], PDO::PARAM_STR);
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function getCategories()
+    {
+        $sql = "SELECT * FROM categories";
+        if ($stmt = $this->pdo->prepare($sql)) {
+            if ($stmt->execute()) {
+                return $stmt->fetchAll();
+            } else {
+                return 'erreur lors de la récuperation des catégories';
+            }
+
+
         }
     }
 
@@ -177,6 +240,7 @@ class dbFunction
 
         }
     }
+
     public function getUserPosts()
     {
 
@@ -213,15 +277,32 @@ class dbFunction
     {
 
         $sql = "UPDATE posts
-SET title = :title, content = :content, categories = :categories , updatedAt = :updatedAt
+SET title = :title, content = :content, category_id = :category_id , updatedAt = :updatedAt
 WHERE ID = :id";
 
         if ($stmt = $this->pdo->prepare($sql)) {
             $stmt->bindParam(":title", $parameters['title'], PDO::PARAM_STR);
             $stmt->bindParam(":content", $parameters['content'], PDO::PARAM_STR);
-            $stmt->bindParam(":categories", $parameters['categories'], PDO::PARAM_STR);
+            $stmt->bindParam(":category_id", $parameters['category_id'], PDO::PARAM_STR);
             $stmt->bindParam(":id", $parameters['id'], PDO::PARAM_STR);
             $stmt->bindParam(":updatedAt", $parameters['updatedAt'], PDO::PARAM_STR);
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function updateCategory($parameters)
+    {
+
+        $sql = "UPDATE `categories`
+SET name = :name
+WHERE ID = :id";
+
+        if ($stmt = $this->pdo->prepare($sql)) {
+            $stmt->bindParam(":name", $parameters['name'], PDO::PARAM_STR);
             if ($stmt->execute()) {
                 return true;
             } else {
@@ -258,6 +339,33 @@ WHERE ID = :id";
         }
     }
 
+    public function deleteCategories($id)
+    {
+        $sql = "DELETE FROM `categories`
+           WHERE ID = :id AND userId = :userId";
+        if ($stmt = $this->pdo->prepare($sql)) {
+            $stmt->bindParam(":id", $id, PDO::PARAM_STR);
+            $stmt->bindParam(":userId", $_SESSION['id'], PDO::PARAM_STR);
+            if ($stmt->execute()) {
+
+                $sql = "DELETE FROM `comments`
+                  WHERE ID = :id";
+                if ($stmt = $this->pdo->prepare($sql)) {
+                    $stmt->bindParam(":id", $id, PDO::PARAM_STR);
+
+                    if ($stmt->execute()) {
+                        return true;
+                    }
+                } else {
+                    return false;
+                }
+                return true;
+
+            } else {
+                return false;
+            }
+        }
+    }
 
 
     public function getComments($id)
@@ -340,7 +448,7 @@ WHERE ID = :id";
             $stmt->bindParam(":id", $id, PDO::PARAM_STR);
             $stmt->bindParam(":userId", $_SESSION['id'], PDO::PARAM_STR);
 
-            if($stmt->execute()) {
+            if ($stmt->execute()) {
                 return true;
             } else {
                 return false;

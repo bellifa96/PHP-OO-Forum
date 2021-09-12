@@ -1,33 +1,30 @@
 <?php
+declare(strict_types=1);
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
-include_once('./../src/Controller/PostController.php');
-include_once('./nav.html');
+require_once(__DIR__ . './../src/Controller/PostController.php');
+require_once(__DIR__ . './nav.html');
 
-if (!isset($_SESSION['login']) or !isset($_GET['id'])) {
+list ('id' => $id) = $_GET;
+
+if (!isset($_SESSION['login']) or !isset($id)) {
     header("location:index.php");
 }
 
-$article = new PostController();
-$data = $article->show($_GET['id']);
+$data = (new PostController)->show($id);
 
+if (empty($data)) header("location:index.php");
+if (isset($_POST['name'])) {
 
-if (empty($data)) {
-    header("location:index.php");
-}
-if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['categories'])) {
+    list ('name' => $name) = $_POST;
 
-    $title = $_POST['title'];
-    $content = $_POST['content'];
-    $categories = $_POST['categories'];
-    $postController = new PostController();
-    if ($postController->edit($title, $content, $categories, $_GET['id'])) {
+    if ((new PostController)->editCategory($name, $id)) {
         header("location:forum.php");
     } else {
-        echo "erreur lors de la création";
+        echo "erreur lors de la création du catégorie";
     };
 
 }

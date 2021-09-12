@@ -1,20 +1,20 @@
 <?php
-include(__DIR__.'./../Bdd/dbFunction.php');
+include(__DIR__ . './../Bdd/dbFunction.php');
 
 class Comment
 {
-    private  $content;
-    private  $createdAt;
-    private  $updatedAt;
-    private  $user;
-    private  $post;
-    private  $bd;
+    private $content;
+    private $createdAt;
+    private $updatedAt;
+    private $user;
+    private $post;
+    private $bd;
 
     /**
      * @param $content
      * @param $post
      */
-    public function __construct($content = null,$post = null )
+    public function __construct($content = null, $post = null)
     {
         $this->content = $content;
         $this->createdAt = date('d/m/Y');
@@ -25,33 +25,36 @@ class Comment
 
     }
 
-    public function create(){
+    public function create()
+    {
 
-        if(!empty($this->content) && !empty($this->post) ){
+        if (!empty($this->content) && !empty($this->post)) {
             $parameters = [
-                'content'=>$this->content,
-                'createdAt'=>$this->createdAt,
-                'updatedAt'=>$this->updatedAt,
-                'userId'=> $this->user,
-                'postId'=> $this->post,
+                'content' => $this->content,
+                'createdAt' => $this->createdAt,
+                'updatedAt' => $this->updatedAt,
+                'userId' => $this->user,
+                'postId' => $this->post,
             ];
             return $this->bd->newComment($parameters);
         }
     }
 
 
-    public function update($parameters){
+    public function update($parameters)
+    {
         return $this->bd->updateComment($parameters);
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         return $this->bd->deleteComment($id);
     }
 
-    public function getComment($id){
+    public function getComment($id)
+    {
         return $this->bd->getComment($id);
     }
-
 
 
 }
