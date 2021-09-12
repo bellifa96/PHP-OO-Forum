@@ -11,7 +11,6 @@ class User
     private $comments;
 
     /**
-     * @param $id
      * @param $firstname
      * @param $lastname
      * @param $email
@@ -20,9 +19,8 @@ class User
      * @param $comments
      */
 
-    public function __construct($id, $firstname, $lastname, $email, $password, $posts, $comments)
+    public function __construct($firstname, $lastname, $email, $password, $posts, $comments)
     {
-        $this->id = $id;
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->email = $email;

@@ -100,10 +100,11 @@ if ($_GET['id']) {
         <thead>
         <tr>
             <th>Id</th>
-            <th>firstname</th>
-            <th>lastname</th>
-            <th>email</th>
-            <th>password</th>
+            <th>commentaire</th>
+            <th>Crée le</th>
+            <th>Modifié le</th>
+            <th>Auteur</th>
+            <th>Action</th>
 
         </tr>
         </thead>
@@ -120,7 +121,7 @@ if ($_GET['id']) {
 
             if ($val['userId'] == $_SESSION['id']) {
                 echo "<td>
-                                 <a href='deleteComment.php/?id=" . $val['ID'] . "'>Supprimer</a> 
+                                 <a href='deleteComment.php?id=" . $val['ID'] . "'>Supprimer</a> 
                                  <a href='updateComment.php?id=" . $val['ID'] . "'> modifier </a>
                                  
                         </td>";

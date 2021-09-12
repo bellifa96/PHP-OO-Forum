@@ -4,21 +4,27 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include_once('./../src/Controller/PostController.php');
+include_once('./../src/Controller/CommentController.php');
 include_once('./nav.html');
 
-if(!isset($_SESSION['login'])){
+if(!isset($_SESSION['login']) or !isset($_GET['id']) ){
+    var_dump($_SESSION);die;
+
     header("location:index.php");
 }
 
+$commentController = new CommentController();
+$data = $commentController->getComment($_GET['id']);
 
-if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['categories']) ) {
 
-    $title = $_POST['title'];
+
+if(empty($data)){
+    header("location:index.php");
+}
+if (isset($_POST['content'])) {
+
     $content = $_POST['content'];
-    $categories = $_POST['categories'];
-    $postController = new PostController();
-    if($postController->newPost($title,$content,$categories)){
+    if($commentController->edit($content,$_GET['id'])){
         header("location:forum.php");
     }else{
         echo "erreur lors de la création";
@@ -42,17 +48,12 @@ if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['categori
 <div class="container" id="container">
     <div class="form-container ">
         <form action="" method="post">
-            <h1 style="text-align: center"> Créer un nouvel article  </h1>
-            <input type="text" placeholder="title" name="title" value="article 1"/>
-            <textarea  placeholder="content" name="content"  rows="10" cols="80"></textarea>
-            <select name="categories" >
-                <option disabled> Veuillez choisir une catégorie</option>
-                <option> PHP </option>
-                <option> HTML </option>
-                <option> CSS </option>
-                <option> C# </option>
-            </select>
-            <button>Créer un Article</button>
+            <h1 style="text-align: center"> modifier un commentaire  </h1>
+
+
+            <textarea  placeholder="content" name="content"  rows="10" cols="80"><?php echo $data[0]['content']; ?>> </textarea>
+
+            <button>modifier un commentaire</button>
         </form>
     </div>
 

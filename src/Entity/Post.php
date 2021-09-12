@@ -1,5 +1,7 @@
 <?php
 
+include(__DIR__.'./../Bdd/dbFunction.php');
+
 class Post
 {
   private $id;
@@ -7,24 +9,24 @@ class Post
   private $content;
   private $createdAt;
   private $updatedAt;
-  private $comments;
+  private $categories;
+  private $userId;
+  private $bd;
 
     /**
-     * @param $id
      * @param $title
      * @param $content
-     * @param $createdAt
-     * @param $updatedAt
-     * @param $comments
+     * @param $categories
      */
-    public function __construct($id, $title, $content, $createdAt, $updatedAt, $comments)
+    public function __construct($title= null, $content= null,$categories= null)
     {
-        $this->id = $id;
+        $this->bd = new dbFunction();
         $this->title = $title;
         $this->content = $content;
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
-        $this->comments[] = $comments;
+        $this->categories = $categories;
+        $this->createdAt = date('d/m/Y');
+        $this->updatedAt = date('d/m/Y');
+        $this->userId = $_SESSION['id'];
     }
 
     /**
@@ -110,17 +112,58 @@ class Post
     /**
      * @return mixed
      */
-    public function getComments()
+    public function getCategories()
     {
-        return $this->comments;
+        return $this->categories;
     }
 
     /**
-     * @param mixed $comments
+     * @param mixed $categories
      */
-    public function setComments($comments)
+    public function setCategories($categories)
     {
-        $this->comments[] = $comments;
+        $this->categories = $categories;
     }
+
+    public function create(){
+
+        if(!empty($this->title) && !empty($this->content) && !empty($this->categories) && !empty($this->userId)){
+            $parameters = ['title'=>$this->title,
+                'content'=>$this->content,
+                'categories'=>$this->categories,
+                'createdAt'=>$this->createdAt,
+                'updatedAt'=>$this->updatedAt,
+                'userId'=>$this->userId
+            ];
+            return $this->bd->newPost($parameters);
+        }
+        return false;
+    }
+
+    public function getPosts(){
+        return $this->bd->getPosts();
+    }
+
+    public function getUserPosts(){
+        return $this->bd->getUserPosts();
+    }
+
+    public function getPost($id){
+        return $this->bd->getPost($id);
+    }
+
+    public function getComments($id){
+        return $this->bd->getComments($id);
+    }
+
+    public function update($parameters){
+        return $this->bd->updatePost($parameters);
+
+    }
+
+    public function delete($id){
+        return $this->bd->deletePost($id);
+    }
+
 
 }

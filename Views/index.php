@@ -3,9 +3,11 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 include_once('./../src/Bdd/dbFunction.php');
+
 if(isset($_SESSION['login'])){
-    header("location:forum.php");
+    header("location:./forum.php");
 }
+
 $funObj = new dbFunction();
 if (isset($_POST['login'])){
 
@@ -50,7 +52,7 @@ if (isset($_POST['register'])) {
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <link rel="stylesheet" type="text/css" href="./login.css"/>
+    <link rel="stylesheet" type="text/css" href="../Style/login.css"/>
 </head>
 <body>
 <h2> Se connecter </h2>

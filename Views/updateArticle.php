@@ -7,18 +7,24 @@ error_reporting(E_ALL);
 include_once('./../src/Controller/PostController.php');
 include_once('./nav.html');
 
-if(!isset($_SESSION['login'])){
+if(!isset($_SESSION['login']) or !isset($_GET['id']) ){
     header("location:index.php");
 }
 
+$article = new PostController();
+$data = $article->show($_GET['id']);
 
+
+if(empty($data)){
+    header("location:index.php");
+}
 if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['categories']) ) {
 
     $title = $_POST['title'];
     $content = $_POST['content'];
     $categories = $_POST['categories'];
     $postController = new PostController();
-    if($postController->newPost($title,$content,$categories)){
+    if($postController->edit($title,$content,$categories,$_GET['id'])){
         header("location:forum.php");
     }else{
         echo "erreur lors de la création";
@@ -42,17 +48,19 @@ if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['categori
 <div class="container" id="container">
     <div class="form-container ">
         <form action="" method="post">
-            <h1 style="text-align: center"> Créer un nouvel article  </h1>
-            <input type="text" placeholder="title" name="title" value="article 1"/>
-            <textarea  placeholder="content" name="content"  rows="10" cols="80"></textarea>
+            <h1 style="text-align: center"> modifier un article  </h1>
+
+
+            <input type="text" placeholder="title" name="title" value="<?php echo $data['post'][0]['title']; ?>"/>
+            <textarea  placeholder="content" name="content"  rows="10" cols="80"><?php echo $data['post'][0]['content']; ?>> </textarea>
             <select name="categories" >
                 <option disabled> Veuillez choisir une catégorie</option>
-                <option> PHP </option>
-                <option> HTML </option>
-                <option> CSS </option>
-                <option> C# </option>
+                <option <?php  $data['post'][0]['categories']== "PHP" ? "selected":null; ?> > PHP </option>
+                <option <?php  $data['post'][0]['categories']== "HTML" ? "selected":null; ?>> HTML </option>
+                <option <?php  $data['post'][0]['categories']== "CSS" ? "selected":null; ?>> CSS </option>
+                <option <?php  $data['post'][0]['categories']== "C#" ? "selected":null; ?>> C# </option>
             </select>
-            <button>Créer un Article</button>
+            <button>modifier un Article</button>
         </form>
     </div>
 
