@@ -18,10 +18,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `ipssi_php_posts_ouss`
+-- Base de données : `ipssi_php_posts`
 --
-CREATE DATABASE IF NOT EXISTS `ipssi_php_posts_ouss` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
-USE `ipssi_php_posts_ouss`;
+CREATE DATABASE IF NOT EXISTS `ipssi_php_posts` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `ipssi_php_posts`;
 
 -- --------------------------------------------------------
 

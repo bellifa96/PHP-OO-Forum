@@ -3,4 +3,4 @@
 const DB_HOST = 'localhost';
 const DB_USER = 'root';
 const DB_PASSWORD = '';
-const DB_DATABASE = 'ipssi_php_posts_ouss';
+const DB_DATABASE = 'ipssi_php_posts';
