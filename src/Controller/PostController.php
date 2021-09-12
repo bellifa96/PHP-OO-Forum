@@ -22,12 +22,15 @@ class PostController
 
     }
 
+    public function newCategory($name){
+        return (new Category($name))->create();
+    }
+
     public function newPost($title,$content,$categories){
         $post = new Post($title,$content,$categories);
         return $post->create();
-
-
     }
+
     public function show($id){
         $post = new Post();
         $data ['post'] = $post->getPost($id);
@@ -52,12 +55,21 @@ class PostController
         return $post->update($parameters);
 
     }
-    public function delete($id){
 
+    public function editCategory($name,$id){
+        return (new Category)->update([
+            'name' => $name,
+            'id'=> $id
+        ]);
+    }
+
+    public function delete($id){
         $post = new Post();
        return $post->delete($id);
+    }
 
-
+    public function deleteCategory($id){
+       return (new Category)->delete($id);
     }
 
 

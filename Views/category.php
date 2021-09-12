@@ -14,26 +14,20 @@ if (!isset($_SESSION['login'])) {
 
 
 if (
-    isset($_POST['title'])
-    && isset($_POST['content'])
-    && isset($_POST['categories'])
+    isset($_POST['name'])
 ) {
 
     list (
-        'title' => $title,
-        'content' => $content,
-        'categories' => $categories,
+        'name' => $name,
     ) = $_POST;
 
     $postController = new PostController;
 
-    if ($postController->newPost($title, $content, $categories)) {
+    if ($postController->newCategory($name)) {
         header("location:forum.php");
-    } else echo "erreur lors de la création";
+    } else echo "erreur lors de la création du catégorie";
 
 }
-
-$categories = Category::all();
 ?>
 
 <!DOCTYPE html>
@@ -51,16 +45,9 @@ $categories = Category::all();
 <div class="container" id="container">
     <div class="form-container ">
         <form action="" method="post">
-            <h1 style="text-align: center"> Créer un nouvel article </h1>
-            <input type="text" placeholder="title" name="title" value="article 1"/>
-            <textarea placeholder="content" name="content" rows="10" cols="80"></textarea>
-            <select name="category_id">
-                <option selected disabled> Veuillez choisir une catégorie</option>
-                <?php foreach($categories as $category) : ?>
-                    <option value="<?= $category->ID ?>"><?= $category->name ?></option>
-                <?php endforeach; ?>
-            </select>
-            <button>Créer un Article</button>
+            <h1 style="text-align: center"> Ajout d'une catégorie </h1>
+            <input type="text" placeholder="Gestion de projet" name="name"/>
+            <button>Valider</button>
         </form>
     </div>
 

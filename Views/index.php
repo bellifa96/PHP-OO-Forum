@@ -1,8 +1,10 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+declare(strict_types=1);
+
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
-include_once('./../src/Bdd/dbFunction.php');
+require_once(__DIR__ . './../src/Bdd/dbFunction.php');
 
 if(isset($_SESSION['login'])){
     header("location:./forum.php");
